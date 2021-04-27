@@ -2,6 +2,9 @@ package solutions;
 
 import model.TreeNode;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * 124. 二叉树中的最大路径和
  * 路径 被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
@@ -40,14 +43,33 @@ public class Solution124 {
     int maxPath = Integer.MIN_VALUE;
 
     public int maxPathSum(TreeNode root) {
+        dps(root);
+        return maxPath;
+    }
+
+
+    LinkedHashMap<Integer, Integer> map;
+
+    public Solution124(int capacity) {
+        map = new LinkedHashMap(capacity, 0.75f, true) {
+
+            @Override
+            public boolean removeEldestEntry(Map.Entry eldest) {
+                return size() > capacity;
+            }
+        };
+    }
+
+
+    public int dps(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        int leftMax = Math.max(maxPathSum(root.left), 0);
-        int rightMax = Math.max(maxPathSum(root.right), 0);
-        int newPathValue = root.val + leftMax + rightMax;
-        maxPath = Math.max(maxPath, newPathValue);
-        return root.val + Math.max(leftMax, rightMax);
+        int leftPath = dps(root.left);
+        int rightPath = dps(root.right);
+        int currPath = Math.max(leftPath, 0) + Math.max(rightPath, 0) + root.val;
+        maxPath = Math.max(currPath, maxPath);
+        return root.val + Math.max(leftPath, rightPath);
     }
 
 }

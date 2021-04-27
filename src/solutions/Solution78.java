@@ -63,23 +63,4 @@ public class Solution78 {
         list.remove(list.size() - 1);
         dfs(nums, cur + 1, res, list);
     }
-
-
-    /**
-     * 循环枚举
-     */
-    public List<List<Integer>> enumerate(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        res.add(new ArrayList<Integer>());
-        for (Integer n : nums) {
-            int size = res.size();
-            for (int i = 0; i < size; i++) {
-                List<Integer> newSub = new ArrayList<Integer>(res.get(i));
-                newSub.add(n);
-                res.add(newSub);
-            }
-        }
-        return res;
-    }
-
 }

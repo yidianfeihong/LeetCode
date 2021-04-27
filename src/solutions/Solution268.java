@@ -23,7 +23,7 @@ import java.util.HashSet;
 public class Solution268 {
     public static void main(String[] args) {
 
-        System.out.println(new Solution268().missingNumber1(new int[]{0,1,2}));
+        System.out.println(new Solution268().missingNumber1(new int[]{0, 1, 2}));
     }
 
     public int missingNumber(int[] nums) {
@@ -39,7 +39,6 @@ public class Solution268 {
         }
         return -1;
     }
-
 
     public int missingNumber1(int[] nums) {
         int missing = nums.length;

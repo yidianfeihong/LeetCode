@@ -7,22 +7,56 @@ public class LRUCache {
 
     private int size;
     private int capacity;
-    private PairNode head;
-    private PairNode tail;
+    private Dnode head;
+    private Dnode tail;
+    Map<Integer, Dnode> cache;
 
-    Map<Integer, PairNode> cache = new HashMap<>();
+    static class Dnode {
+        int key;
+        int value;
+
+        Dnode pre;
+        Dnode next;
+
+        public Dnode() {
+        }
+
+        public Dnode(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
 
     public LRUCache(int capacity) {
         this.size = 0;
         this.capacity = capacity;
-        head = new PairNode();
-        tail = new PairNode();
+        head = new Dnode();
+        tail = new Dnode();
         head.next = tail;
         tail.pre = head;
+        cache = new HashMap<>();
+    }
+
+    public void put(int key, int value) {
+        Dnode node = cache.get(key);
+        if (cache.containsKey(key)) {
+            node.value = value;
+            moveToHead(node);
+        } else {
+            Dnode newNode = new Dnode(key, value);
+            cache.put(key, newNode);
+            addToHead(newNode);
+            size++;
+            if (size > capacity) {
+                Dnode res = removeTail();
+                cache.remove(res.key);
+                size--;
+            }
+        }
     }
 
     public int get(int key) {
-        PairNode node = cache.get(key);
+        Dnode node = cache.get(key);
         if (node == null) {
             return -1;
         } else {
@@ -31,60 +65,27 @@ public class LRUCache {
         }
     }
 
-    private void moveToHead(PairNode node) {
+    private void moveToHead(Dnode node) {
         removeNode(node);
         addToHead(node);
     }
 
-    private void removeNode(PairNode node) {
+    private void addToHead(Dnode node) {
+        node.next = head.next;
+        node.next.pre = node;
+        head.next = node;
+        node.pre = head;
+    }
+
+    private void removeNode(Dnode node) {
         node.pre.next = node.next;
         node.next.pre = node.pre;
     }
 
-    private void addToHead(PairNode node) {
-        node.pre = head;
-        node.next = head.next;
-        node.next.pre = node;
-        head.next = node;
-    }
-
-    public void put(int key, int value) {
-        PairNode node = cache.get(key);
-        if (cache.containsKey(key)) {
-            node.value = value;
-            moveToHead(node);
-        } else {
-            PairNode newNode = new PairNode(key, value);
-            cache.put(key, newNode);
-            size++;
-            if (size > capacity) {
-                PairNode res = removeTail();
-                cache.remove(res.key);
-                size--;
-            }
-        }
-    }
-
-    public PairNode removeTail() {
-        PairNode node = this.tail.pre;
+    public Dnode removeTail() {
+        Dnode node = tail.pre;
         removeNode(node);
         return node;
-    }
-
-    static class PairNode {
-        int key;
-        int value;
-
-        PairNode pre;
-        PairNode next;
-
-        public PairNode() {
-        }
-
-        public PairNode(int key, int value) {
-            this.key = key;
-            this.value = value;
-        }
     }
 
 }

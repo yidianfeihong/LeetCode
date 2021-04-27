@@ -38,17 +38,17 @@ public class Solution75 {
         int p2 = nums.length - 1;
         for (int i = 0; i <= p2; ) {
             if (nums[i] == 0) {
-                sort(nums, i, p0++);
+                swap(nums, i, p0++);
                 i++;
             } else if (nums[i] == 2) {
-                sort(nums, i, p2--);
+                swap(nums, i, p2--);
             } else {
                 i++;
             }
         }
     }
 
-    static void sort(int[] nums, int i, int j) {
+    static void swap(int[] nums, int i, int j) {
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;

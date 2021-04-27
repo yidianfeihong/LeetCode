@@ -29,7 +29,7 @@ public class Solution142 {
     }
 
     public ListNode detectCycle(ListNode head) {
-        if (head == null || head.next == null) {
+        if (head == null) {
             return head;
         }
         ListNode slow = head;
@@ -48,5 +48,27 @@ public class Solution142 {
         }
         return null;
     }
+
+
+    public ListNode detectCycle1(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                break;
+            }
+        }
+        ListNode cur = head;
+        while (slow != null && cur != slow) {
+            cur = cur.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
 
 }
